@@ -1,6 +1,5 @@
 # General tooling
 choco install --confirm powershell --version 5.1.14409.20180811
-choco install --confirm rsat -params '"/SM"' --version 2.1809.0.20190205
 choco install --confirm notepadplusplus.install --version 7.6.3
 
 # Version Control System
