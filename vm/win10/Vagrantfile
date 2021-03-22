@@ -29,11 +29,11 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", privileged: "true", inline: <<-'POWERSHELL'
     Import-Module Boxstarter.Chocolatey
     Disable-UAC
-	Disable-BingSearch
-	Disable-InternetExplorerESC
-	Disable-GameBarTips
-	Enable-RemoteDesktop
-	Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -EnableShowFullPathInTitleBar
-	Restart-Computer -Force
+    Disable-BingSearch
+    Disable-InternetExplorerESC
+    Disable-GameBarTips
+    Enable-RemoteDesktop
+    Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -EnableShowFullPathInTitleBar
+    Restart-Computer -Force
   POWERSHELL
 end
