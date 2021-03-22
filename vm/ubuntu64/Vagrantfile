@@ -1,0 +1,19 @@
+$script = <<-'SCRIPT'
+  echo "Configuring local timezone ..."
+  sudo timedatectl set-timezone Europe/Amsterdam
+  echo "Getting latest packages ..."
+  sudo apt-get update
+SCRIPT
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.network "private_network", ip: "192.168.2.2"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "LinuxDataServer"
+    vb.cpus = 2
+    vb.memory = 2048
+  end
+  
+  config.vm.provision "shell", inline: $script
+end

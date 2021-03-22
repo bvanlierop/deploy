@@ -1,0 +1,39 @@
+$script = <<-'SCRIPT'
+  echo "Setting time zone ..."
+  tzutil /s "W. Europe Standard Time"
+  echo "Disabling firewall on all profiles ..."
+  netsh advfirewall set allprofiles state off
+  echo "Installing tools ..."
+  choco install powershell -y
+  choco install boxstarter -y
+  choco install windirstat -y
+  choco install ntop.portable -y
+SCRIPT
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "StefanScherer/windows_10"
+  config.vm.network "private_network", ip: "192.168.2.3"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.gui = true
+    vb.name = "WinCow10"
+    vb.cpus = 2
+    vb.memory = 3096
+  end
+
+  # Install chocolatey
+  config.vm.provision "shell", inline: "iwr -useb chocolatey.org/install.ps1 | iex", privileged: true
+  # Install tooling
+  config.vm.provision "shell", inline: $script
+  # Configure Win10 using Boxstarter
+  config.vm.provision "shell", privileged: "true", inline: <<-'POWERSHELL'
+    Import-Module Boxstarter.Chocolatey
+    Disable-UAC
+	Disable-BingSearch
+	Disable-InternetExplorerESC
+	Disable-GameBarTips
+	Enable-RemoteDesktop
+	Set-WindowsExplorerOptions -EnableShowHiddenFilesFoldersDrives -EnableShowFileExtensions -EnableShowFullPathInTitleBar
+	Restart-Computer -Force
+  POWERSHELL
+end
